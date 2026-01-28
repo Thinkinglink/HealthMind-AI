@@ -153,8 +153,8 @@
         .send-btn svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; }
 
         .tracking-map { width: 100%; height: 35vh; background: var(--bg-gray); position: relative; flex-shrink: 0; overflow: hidden; }
-        #map-frame { width: 100%; height: 100%; border: none; display: none; }
-        #map-frame.visible { display: block; }
+        #map-container { width: 100%; height: 100%; position: relative; }
+        #map-frame { width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; }
         
         .tracking-timer { font-size: 48px; font-weight: 800; text-align: center; margin: 20px 0; color: var(--primary); font-variant-numeric: tabular-nums; }
         .tracking-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 0 20px 15px; }
@@ -192,7 +192,6 @@
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .legend-color { width: 12px; height: 12px; border-radius: 2px; }
 
-        /* WORKOUT TRACKING INDICATOR */
         .tracking-indicator {
             position: fixed;
             top: 70px;
@@ -211,12 +210,8 @@
 </head>
 <body>
     <div class="app">
-        <!-- Tracking Indicator (shows when workout is active) -->
-        <div class="tracking-indicator" id="tracking-indicator" style="display: none;">
-            🏃 TRACKING...
-        </div>
+        <div class="tracking-indicator" id="tracking-indicator" style="display: none;">🏃 TRACKING...</div>
 
-        <!-- Splash -->
         <div class="screen splash active" id="splash">
             <div>
                 <div class="splash-title">HealthMind AI</div>
@@ -224,7 +219,6 @@
             </div>
         </div>
 
-        <!-- Login -->
         <div class="screen auth-screen" id="login">
             <div class="auth-header">
                 <h1 style="font-size: 32px; font-weight: 700;">Welcome Back</h1>
@@ -245,7 +239,6 @@
             </div>
         </div>
 
-        <!-- Signup -->
         <div class="screen auth-screen" id="signup">
             <div class="auth-header">
                 <h1 style="font-size: 32px; font-weight: 700;">Create Account</h1>
@@ -269,7 +262,6 @@
             </div>
         </div>
 
-        <!-- Dashboard -->
         <div class="screen" id="dashboard">
             <div class="header"><div class="header-title">HealthMind AI</div></div>
             <div class="content">
@@ -337,13 +329,12 @@
             </div>
         </div>
 
-        <!-- Workout -->
         <div class="screen" id="workout">
             <div class="header"><div class="header-title">Workout Tracking</div></div>
             <div id="workout-selection">
                 <div style="padding: 20px; text-align: center;">
                     <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 10px;">Choose Your Activity</h3>
-                    <p style="color: var(--text-gray); font-size: 14px;">Select the type of workout you want to track</p>
+                    <p style="color: var(--text-gray); font-size: 14px;">Select the type of workout</p>
                 </div>
                 <div class="workout-types">
                     <div class="workout-type selected" onclick="selectWorkoutType('Walking', this)">
@@ -367,12 +358,14 @@
             </div>
             <div id="workout-tracking" style="display: none; height: 100%; flex-direction: column;">
                 <div class="tracking-map">
-                    <iframe id="map-frame" allow="geolocation"></iframe>
-                    <div id="map-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-gray);">
-                        <div>
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <p style="margin-top: 10px; font-weight: 600;">Requesting GPS...</p>
-                            <p style="font-size: 13px;" id="workout-type-label">Walking</p>
+                    <div id="map-container">
+                        <iframe id="map-frame" allow="geolocation"></iframe>
+                        <div id="map-placeholder" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-gray); position: absolute; top: 0; left: 0;">
+                            <div>
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <p style="margin-top: 10px; font-weight: 600;">Requesting GPS...</p>
+                                <p style="font-size: 13px;" id="workout-type-label">Walking</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -396,7 +389,6 @@
             </div>
         </div>
 
-        <!-- AI Coach -->
         <div class="screen" id="coach">
             <div class="header"><div class="header-title">AI Health Coach</div></div>
             <div class="chat-messages" id="chat">
@@ -424,7 +416,6 @@
             </div>
         </div>
 
-        <!-- Nutrition -->
         <div class="screen" id="nutrition">
             <div class="header"><div class="header-title">Nutrition Log</div><div class="header-action" onclick="showModal('food')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
             <div class="content">
@@ -471,7 +462,6 @@
             </div>
         </div>
 
-        <!-- Goals - PINK THEME -->
         <div class="screen" id="goals">
             <div class="header"><div class="header-title">My Goals</div><div class="header-action" onclick="showModal('goal')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
             <div class="content">
@@ -508,36 +498,23 @@
     <script>
 const STATE={user:null,workouts:[],foods:[],goals:[],hydration:[],selectedWorkoutType:'Walking'};
 let isRecording=false,recognition=null;
+let trackTimer=null,trackStart=0,gpsWatch=null,lastPos=null,isTracking=false,isPaused=false,pausedTime=0,mapUpdateTimer=null;
 
-// CRITICAL: Workout tracking state - PERSISTENT across screens
-let trackTimer=null,trackStart=0,gpsWatch=null,lastPos=null,isTracking=false,isPaused=false,pausedTime=0;
-
-function load(){
-    const s=localStorage.getItem('hm_data');
-    if(s){try{Object.assign(STATE,JSON.parse(s));}catch(e){}}
-}
-
-function save(){
-    try{localStorage.setItem('hm_data',JSON.stringify(STATE));}catch(e){}
-}
+function load(){const s=localStorage.getItem('hm_data');if(s){try{Object.assign(STATE,JSON.parse(s));}catch(e){}}}
+function save(){try{localStorage.setItem('hm_data',JSON.stringify(STATE));}catch(e){}}
 
 function goTo(s){
     document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
     document.getElementById(s).classList.add('active');
-    
-    // CRITICAL: Don't reset workout screen when tracking!
     if(s==='workout'){
         if(isTracking){
-            // Show tracking view
             document.getElementById('workout-selection').style.display='none';
             document.getElementById('workout-tracking').style.display='flex';
         }else{
-            // Show selection view
             document.getElementById('workout-selection').style.display='block';
             document.getElementById('workout-tracking').style.display='none';
         }
     }
-    
     if(s==='dashboard')updateDash();
     if(s==='goals')updateGoals();
     if(s==='nutrition')updateNutrition();
@@ -556,7 +533,6 @@ function nav(el,s){
     goTo(s);
 }
 
-// Auth
 function signup(){
     const name=document.getElementById('signup-name').value.trim();
     const email=document.getElementById('signup-email').value.trim();
@@ -582,21 +558,12 @@ function login(){
     STATE.user=user;save();goTo('dashboard');
 }
 
-// Dashboard - SYNCED
 function updateDash(){
     if(!STATE.user)return;
     document.getElementById('dash-name').textContent=STATE.user.name.split(' ')[0];
-    
     let steps=0,dist=0,cal=0;
     STATE.workouts.forEach(w=>{steps+=w.steps||0;dist+=w.distance||0;cal+=w.calories||0;});
-    
-    // Include current tracking
-    if(isTracking && STATE.tracking){
-        steps+=STATE.tracking.steps||0;
-        dist+=STATE.tracking.distance||0;
-        cal+=STATE.tracking.calories||0;
-    }
-    
+    if(isTracking && STATE.tracking){steps+=STATE.tracking.steps||0;dist+=STATE.tracking.distance||0;cal+=STATE.tracking.calories||0;}
     document.getElementById('dist-val').textContent=dist.toFixed(1);
     document.getElementById('workout-val').textContent=STATE.workouts.length;
     const circ=301.6;
@@ -604,7 +571,6 @@ function updateDash(){
     document.getElementById('steps-txt').textContent=steps.toLocaleString();
     document.getElementById('cal-ring').style.strokeDashoffset=circ-(Math.min(cal/500,1)*circ);
     document.getElementById('cal-txt').textContent=Math.floor(cal);
-    
     const bars=document.getElementById('weekly-bars');
     bars.innerHTML='';
     [40,60,30,80,50,90,70].forEach((h,i)=>{
@@ -617,16 +583,12 @@ function updateDash(){
         bar.appendChild(lbl);
         bars.appendChild(bar);
     });
-    
-    // Nutrition sync
     let totalCal=0;
     if(STATE.foods)STATE.foods.forEach(f=>totalCal+=f.calories||0);
     const goal=2000;
     const remaining=goal-totalCal+cal;
     document.getElementById('dash-cal-remaining').textContent=Math.max(0,Math.round(remaining));
     document.getElementById('dash-nutr-subtitle').textContent=`Eaten: ${totalCal} cal | Burned: ${Math.round(cal)} cal`;
-    
-    // Goal sync
     const goalDisplay=document.getElementById('dash-goal-display');
     if(STATE.goals && STATE.goals.length>0){
         const g=STATE.goals[0];
@@ -639,7 +601,6 @@ function updateDash(){
     }
 }
 
-// Workout - BACKGROUND TRACKING
 function selectWorkoutType(type,el){
     STATE.selectedWorkoutType=type;
     document.querySelectorAll('.workout-type').forEach(x=>x.classList.remove('selected'));
@@ -648,35 +609,20 @@ function selectWorkoutType(type,el){
 
 function startWorkout(){
     if(isTracking)return;
-    
     STATE.tracking={type:STATE.selectedWorkoutType,start:Date.now(),distance:0,steps:0,calories:0,speeds:[]};
     isTracking=true;
     isPaused=false;
-    
-    // Show tracking indicator
     document.getElementById('tracking-indicator').style.display='block';
-    
     document.getElementById('workout-selection').style.display='none';
     document.getElementById('workout-tracking').style.display='flex';
     document.getElementById('workout-type-label').textContent=STATE.selectedWorkoutType;
-    
     trackStart=Date.now();
-    trackTimer=setInterval(()=>{
-        updateTimer();
-        updateTrackDisplay();
-        updateDash(); // Real-time sync!
-    },1000);
-    
+    trackTimer=setInterval(()=>{updateTimer();updateTrackDisplay();updateDash();},1000);
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
             pos=>{
                 lastPos={lat:pos.coords.latitude,lon:pos.coords.longitude,time:Date.now(),alt:pos.coords.altitude||0};
-                
-                const mapFrame=document.getElementById('map-frame');
-                mapFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lastPos.lon-0.01},${lastPos.lat-0.01},${lastPos.lon+0.01},${lastPos.lat+0.01}&layer=mapnik&marker=${lastPos.lat},${lastPos.lon}`;
-                mapFrame.classList.add('visible');
-                document.getElementById('map-placeholder').style.display='none';
-                
+                updateMapSmooth(lastPos.lat,lastPos.lon);
                 gpsWatch=navigator.geolocation.watchPosition(
                     pos=>{
                         if(!isPaused){
@@ -685,11 +631,8 @@ function startWorkout(){
                                 const d=dist(lastPos.lat,lastPos.lon,curr.lat,curr.lon);
                                 const timeDiff=(curr.time-lastPos.time)/1000;
                                 const speed=timeDiff>0?(d/timeDiff)*3600:0;
-                                
                                 STATE.tracking.distance+=d;
                                 STATE.tracking.speeds.push(speed);
-                                
-                                // Activity-specific calculations
                                 if(STATE.selectedWorkoutType==='Walking'){
                                     STATE.tracking.steps+=Math.floor(d*1315);
                                     STATE.tracking.calories+=d*65;
@@ -706,9 +649,7 @@ function startWorkout(){
                                 }
                             }
                             lastPos=curr;
-                            
-                            const mapFrame=document.getElementById('map-frame');
-                            mapFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${curr.lon-0.01},${curr.lat-0.01},${curr.lon+0.01},${curr.lat+0.01}&layer=mapnik&marker=${curr.lat},${curr.lon}`;
+                            updateMapSmooth(curr.lat,curr.lon);
                         }
                     },
                     err=>console.error('GPS:',err),
@@ -718,6 +659,17 @@ function startWorkout(){
             err=>{alert('Please enable GPS');}
         );
     }
+}
+
+function updateMapSmooth(lat,lon){
+    if(mapUpdateTimer)clearTimeout(mapUpdateTimer);
+    mapUpdateTimer=setTimeout(()=>{
+        const mapFrame=document.getElementById('map-frame');
+        const mapPlaceholder=document.getElementById('map-placeholder');
+        mapFrame.src=`https://www.openstreetmap.org/export/embed.html?bbox=${lon-0.005},${lat-0.005},${lon+0.005},${lat+0.005}&layer=mapnik&marker=${lat},${lon}`;
+        mapFrame.style.display='block';
+        mapPlaceholder.style.display='none';
+    },2000);
 }
 
 function pauseWorkout(){
@@ -742,10 +694,8 @@ function stopWorkout(){
     if(!isTracking)return;
     clearInterval(trackTimer);
     if(gpsWatch)navigator.geolocation.clearWatch(gpsWatch);
-    
-    // Hide tracking indicator
+    if(mapUpdateTimer)clearTimeout(mapUpdateTimer);
     document.getElementById('tracking-indicator').style.display='none';
-    
     STATE.workouts.push({
         type:STATE.selectedWorkoutType,
         date:new Date().toISOString(),
@@ -753,29 +703,24 @@ function stopWorkout(){
         steps:Math.floor(STATE.tracking.steps),
         calories:Math.floor(STATE.tracking.calories)
     });
-    
     STATE.tracking=null;
     lastPos=null;
     isTracking=false;
     isPaused=false;
-    
     document.getElementById('workout-selection').style.display='block';
     document.getElementById('workout-tracking').style.display='none';
     document.getElementById('timer').textContent='00:00:00';
     document.getElementById('t-dist').textContent='0.0';
     document.getElementById('t-steps').textContent='0';
     document.getElementById('t-cal').textContent='0';
-    
     const mapFrame=document.getElementById('map-frame');
-    mapFrame.classList.remove('visible');
+    mapFrame.style.display='none';
     document.getElementById('map-placeholder').style.display='flex';
     mapFrame.src='';
-    
     const btn=document.getElementById('pause-btn');
     btn.textContent='PAUSE';
     btn.style.background='var(--accent)';
     btn.style.color='white';
-    
     save();
     const last=STATE.workouts[STATE.workouts.length-1];
     alert(`Workout saved!\nDistance: ${last.distance.toFixed(2)}km\nSteps: ${last.steps}\nCalories: ${last.calories}`);
@@ -806,7 +751,6 @@ function dist(lat1,lon1,lat2,lon2){
     return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-// Modals
 function showModal(type){
     const modal=document.getElementById('modal');
     const body=document.getElementById('modal-body');
@@ -851,7 +795,6 @@ function addGoal(){
     if(!current||!target||!days){alert('Please fill all fields');return;}
     if(current<=target){alert('Current must be higher than target');return;}
     if(days<7){alert('Minimum 7 days');return;}
-    
     const diff=current-target;
     const dailyCal=Math.ceil((diff*3500)/days);
     STATE.goals=[{title:`Lose ${diff.toFixed(1)} lbs`,current,target,days,dailyCalDeficit:dailyCal,created:new Date().toISOString()}];
@@ -868,23 +811,19 @@ function updateNutrition(){
     }else{
         foodList.innerHTML='<p style="text-align: center; color: var(--text-gray); padding: 20px;">No meals logged yet. Tap + to add!</p>';
     }
-    
     let totalCal=0;
     if(STATE.foods)STATE.foods.forEach(f=>totalCal+=f.calories||0);
     let burned=0;
     STATE.workouts.forEach(w=>burned+=w.calories||0);
     if(isTracking&&STATE.tracking)burned+=STATE.tracking.calories||0;
-    
     const goal=2000;
     const remaining=goal-totalCal+burned;
     document.getElementById('cal-remaining').textContent=Math.max(0,Math.round(remaining));
     document.getElementById('cal-subtitle').textContent=`Eaten: ${totalCal} cal | Burned: ${Math.round(burned)} cal`;
-    
     let waterOz=0,coffeeOz=0;
     if(STATE.hydration){STATE.hydration.forEach(h=>{if(h.type==='water')waterOz+=h.oz||0;else coffeeOz+=h.oz||0;});}
     document.getElementById('water-count').textContent=waterOz;
     document.getElementById('coffee-count').textContent=coffeeOz;
-    
     const nutrBars=document.getElementById('nutr-bars');
     nutrBars.innerHTML='';
     [1200,1800,1500,2100,1900,2200,totalCal||500].forEach((cal,i)=>{
@@ -898,7 +837,6 @@ function updateNutrition(){
         bar.appendChild(lbl);
         nutrBars.appendChild(bar);
     });
-    
     drawHydrationChart();
 }
 
@@ -908,11 +846,9 @@ function drawHydrationChart(){
         svg.innerHTML='<text x="50" y="50" text-anchor="middle" fill="#607D8B" font-size="8">No hydration data yet</text>';
         return;
     }
-    
     const hourlyData={};
     for(let h=0;h<24;h++)hourlyData[h]={water:0,coffee:0};
     STATE.hydration.forEach(h=>{if(hourlyData[h.hour])hourlyData[h.hour][h.type]+=h.oz||0;});
-    
     const maxOz=Math.max(...Object.values(hourlyData).map(d=>d.water+d.coffee),1);
     let waterPath='M 0,100',coffeePath='M 0,100';
     Object.keys(hourlyData).forEach((hour,i)=>{
@@ -927,11 +863,9 @@ function drawHydrationChart(){
     svg.innerHTML=`<path d="${waterPath}" fill="rgba(78,205,196,0.3)" stroke="#4ECDC4" stroke-width="1"/><path d="${coffeePath}" fill="rgba(168,115,63,0.3)" stroke="#A8733F" stroke-width="1"/><line x1="0" y1="100" x2="100" y2="100" stroke="#E0E0E0" stroke-width="0.5"/><text x="2" y="15" font-size="6" fill="#607D8B">${Math.round(maxOz)}oz</text>`;
 }
 
-// Goals - PINK + ACCURATE
 function updateGoals(){
     const msgs=['You\'re unstoppable!','Amazing dedication!','Every step counts!','Crushing your goals!','Your hard work is paying off!'];
     document.getElementById('goal-motivation').textContent=msgs[Math.floor(Math.random()*msgs.length)];
-    
     const goalView=document.getElementById('active-goal-view');
     if(STATE.goals && STATE.goals.length>0){
         const g=STATE.goals[0];
@@ -942,7 +876,6 @@ function updateGoals(){
     }else{
         goalView.innerHTML='<div class="list-item"><div class="list-item-info"><div class="list-item-title">No active goal</div><div class="list-item-subtitle">Tap + to set a new goal</div></div></div>';
     }
-    
     const bars=document.getElementById('goal-bars');
     bars.innerHTML='';
     [20,35,50,65,75,85,95].forEach((progress,i)=>{
@@ -958,7 +891,6 @@ function updateGoals(){
     });
 }
 
-// Voice
 function toggleVoice(){
     const voiceBtn=document.getElementById('voice-btn');
     if(isRecording){stopRecording();return;}
@@ -1037,95 +969,26 @@ function addBotMessage(msg){
     chat.scrollTop=chat.scrollHeight;
 }
 
-// AI - 50+ KEYWORDS + VARIED FALLBACKS
-const AI={
-"lose weight":"Create a caloric deficit of 300-500 cal daily. Combine cardio 3-4x/week with strength training 2-3x/week. Track food and aim for 1-2 lbs loss per week.",
-"build muscle":"Eat 0.8-1g protein per lb bodyweight. Lift heavy 3-4x/week using progressive overload. Sleep 7-9 hours for recovery.",
-"protein":"Aim for 0.8-1g per lb bodyweight. Sources: chicken, fish, eggs, Greek yogurt, beans, tofu, powder. Spread throughout day.",
-"water":"Drink half your bodyweight in ounces daily. Add 16-20oz per hour of exercise. Dark urine = need more water.",
-"workout":"Beginners: 3-4x/week full body. Intermediate: 4-5x/week split. Include warm-up, main workout, cool-down.",
-"cardio":"Mix steady-state (30-45min moderate) or HIIT (15-20min intervals). Do 3-5x/week after weights or separate days.",
-"rest":"Rest crucial! Muscles grow during rest. Take 1-2 full rest days/week. Light activity OK.",
-"motivated":"Set SMART goals. Track progress with photos/measurements. Find workout buddy. Remember your WHY!",
-"diet":"Focus on whole foods: lean proteins, fruits, vegetables, whole grains, healthy fats. 80/20 rule.",
-"sleep":"Get 7-9 hours nightly. Muscle recovery and hormones happen here. Poor sleep = poor results.",
-"beginner":"Start with 3x/week full body and 20-30min cardio 2-3x/week. Learn form. Track nutrition. Be patient!",
-"abs":"Abs made in kitchen! Core work 2-3x/week: planks, twists, leg raises, crunches. Daily not needed.",
-"stretch":"Dynamic before workouts. Static after (hold 30sec). Improves flexibility, reduces injury.",
-"strength":"Compound first: squats, deadlifts, bench, rows. Then isolation. 3-4 sets, 8-12 reps.",
-"running":"Start slow! Walk-run program, focus form, good shoes, increase mileage 10% weekly max.",
-"cycling":"Adjust bike fit properly. Start 20-30min easy pace. Build endurance before intensity.",
-"walking":"Great low-impact! Aim 30-60min most days. Swing arms, good posture, comfortable pace.",
-"hiking":"Build endurance first. Proper footwear essential. Bring water. Start easy trails.",
-"calories":"Calculate TDEE. Weight loss: TDEE-500. Maintenance: TDEE. Muscle gain: TDEE+300-500.",
-"carbs":"Carbs fuel workouts! Choose complex: oats, brown rice, quinoa, sweet potato. Eat around workouts.",
-"fat":"Healthy fats essential! Avocados, nuts, olive oil, fatty fish. 20-30% total calories.",
-"meal prep":"Prep Sundays! Cook proteins bulk, chop veggies, portion meals. Use containers. Freeze extras.",
-"supplements":"Not necessary but helpful: Protein powder, Creatine (5g daily), Vitamin D, Omega-3. Food first!",
-"creatine":"Safest supplement! 5g daily improves strength and muscle growth. Stay hydrated.",
-"injury":"Stop if pain! RICE: Rest, Ice, Compression, Elevation. See doctor if persists.",
-"sore":"DOMS normal! Peaks 24-48hrs post-workout. Ease with movement, stretching, foam rolling, protein.",
-"plateau":"Hit plateau? Increase intensity, change routine, recalculate calories, check portions.",
-"recovery":"Recovery when adaptation happens! Prioritize sleep, nutrition, hydration, active recovery, stretching.",
-"consistency":"Consistency everything! Better 30min 4x/week than 2hr once. Build habits. Small actions = big results.",
-"motivation":"Motivation comes and goes - build discipline! Routine, schedule workouts, celebrate wins.",
-"stress":"Exercise reduces stress! Releases endorphins. Also: meditation, yoga, breathing, nature.",
-"gym":"First visit: Tour, start machines, learn 5-6 exercises, don't compare, ask staff, off-peak hours.",
-"home":"No gym? Bodyweight: push-ups, squats, lunges, planks, burpees. Add bands, dumbbells.",
-"equipment":"Minimal home: bands ($20), dumbbells ($100-200), yoga mat ($20). Enough!",
-"track":"Track everything! Workouts (sets/reps/weight), food (cal/macros), measurements. Data = progress.",
-"progress":"Track multiple ways: photos, measurements, how clothes fit, strength increases, energy levels.",
-"age":"Never too old! Start slow, focus form, listen body. Strength training important for aging.",
-"woman":"Ladies lift weights! Won't get bulky. Benefits: strength, bones, metabolism!",
-"form":"Form over weight ALWAYS! Bad form = injury. Start light, master movement, add weight.",
-"nutrition":"Nutrition 70-80% of results! Can't out-train bad diet. Focus nutrient-dense whole foods.",
-"hydration":"Proper hydration improves performance, aids recovery, regulates temperature. Sip throughout day.",
-"flexibility":"Improved flexibility enhances performance, reduces injury. Add yoga or mobility 2-3x/week.",
-"core":"Strong core improves posture, balance, strength! Planks, dead bugs, bird dogs, pallof presses.",
-"hiit":"20-30sec max effort, 60-90sec rest. Repeat 8-10x. Great for fat loss. 2-3x/week max!",
-"morning":"Great! Fasted or light snack. Benefits: consistency, energy all day. Eat protein after.",
-"evening":"Works too! May be stronger. Eat 1-2hrs before. May affect sleep - test it.",
-"food":"Choose foods that nourish body and align with goals. Prioritize proteins, complex carbs, healthy fats, veggies.",
-"weight loss":"Focus consistency over perfection! Balanced nutrition + regular exercise + sleep + hydration + track weekly.",
-"muscle":"Muscles grow during rest! Eat enough protein, lift consistently, adequate recovery time.",
-"exercise":"Consistency trumps intensity! Better moderate workouts regularly than intense sporadically.",
-"how":"How to start? Begin today! Set one small goal, schedule first workout, clean out unhealthy foods.",
-"when":"Best time is whenever you'll actually do it consistently! Some prefer mornings, others evenings.",
-"start":"Hardest part is getting started! Begin where you are, use what you have, do what you can."
-};
-
-const FALLBACKS=[
-"That's interesting! I specialize in fitness, nutrition, weight loss, muscle building, workouts, recovery, and motivation. Could you rephrase?",
-"Great question! While I'm focused on fitness topics, I'd love to help! Ask me about workouts, nutrition, supplements, recovery, or motivation.",
-"I'm here for your fitness journey! Try asking about 'how to lose weight', 'build muscle', 'meal prep', 'workout routines', or 'staying motivated'.",
-"Interesting! What would you like to know about: weight loss strategies, muscle building, nutrition planning, workout programming, or recovery?",
-"I'm your AI fitness coach! I can help with exercise, nutrition, supplements, injury prevention, and motivation. What interests you most?"
-];
+const AI={"lose weight":"Create a 300-500 cal daily deficit. Cardio 3-4x/week + strength training 2-3x/week. Track food. Aim 1-2 lbs loss weekly.","build muscle":"Eat 0.8-1g protein per lb bodyweight. Lift heavy 3-4x/week with progressive overload. Sleep 7-9 hours.","protein":"0.8-1g per lb bodyweight. Sources: chicken, fish, eggs, Greek yogurt, beans, tofu. Spread throughout day.","water":"Half your bodyweight in ounces daily. Add 16-20oz per hour exercise. Dark urine = need more.","workout":"Beginners: 3-4x/week full body. Intermediate: 4-5x/week split. Include warm-up, workout, cool-down.","cardio":"Mix steady-state (30-45min) or HIIT (15-20min). 3-5x/week after weights or separate days.","rest":"Crucial! Muscles grow during rest. Take 1-2 full rest days weekly. Light activity OK.","motivated":"Set SMART goals. Track with photos/measurements. Find buddy. Remember your WHY!","diet":"Whole foods: lean proteins, fruits, veggies, whole grains, healthy fats. 80/20 rule.","sleep":"7-9 hours nightly. Recovery and hormones happen here. Poor sleep = poor results.","beginner":"3x/week full body + 20-30min cardio 2-3x/week. Learn form. Track nutrition. Be patient!","abs":"Made in kitchen! Core 2-3x/week: planks, twists, leg raises, crunches. Daily not needed.","stretch":"Dynamic before workouts. Static after (hold 30sec). Improves flexibility, reduces injury.","strength":"Compound first: squats, deadlifts, bench, rows. Then isolation. 3-4 sets, 8-12 reps.","running":"Start slow! Walk-run program, focus form, good shoes, increase 10% weekly max.","cycling":"Adjust bike fit. Start 20-30min easy. Build endurance before intensity.","walking":"Great low-impact! 30-60min most days. Swing arms, good posture, comfortable pace.","hiking":"Build endurance first. Proper footwear essential. Bring water. Start easy trails.","calories":"Calculate TDEE. Loss: TDEE-500. Maintenance: TDEE. Gain: TDEE+300-500.","carbs":"Fuel workouts! Complex: oats, brown rice, quinoa, sweet potato. Eat around workouts.","fat":"Essential! Avocados, nuts, olive oil, fatty fish. 20-30% total calories.","meal prep":"Sundays! Cook bulk proteins, chop veggies, portion meals. Use containers. Freeze extras.","supplements":"Helpful: Protein powder, Creatine (5g daily), Vitamin D, Omega-3. Food first!","creatine":"Safest! 5g daily improves strength and muscle. Stay hydrated.","injury":"Stop if pain! RICE: Rest, Ice, Compression, Elevation. See doctor if persists.","sore":"DOMS normal! Peaks 24-48hrs. Ease with movement, stretching, foam rolling, protein.","plateau":"Increase intensity, change routine, recalculate calories, check portions.","recovery":"When adaptation happens! Sleep, nutrition, hydration, active recovery, stretching.","consistency":"Key! Better 30min 4x/week than 2hr once. Build habits. Small actions = big results.","motivation":"Comes and goes - build discipline! Routine, schedule workouts, celebrate wins.","stress":"Exercise reduces stress! Releases endorphins. Also: meditation, yoga, breathing.","gym":"First visit: Tour, start machines, learn 5-6 exercises, don't compare, ask staff.","home":"No gym? Bodyweight: push-ups, squats, lunges, planks, burpees. Add bands, dumbbells.","equipment":"Minimal: bands ($20), dumbbells ($100-200), mat ($20). Enough!","track":"Track everything! Workouts, food, measurements. Data = progress.","progress":"Multiple ways: photos, measurements, clothes fit, strength, energy levels.","age":"Never too old! Start slow, focus form, listen body. Strength important for aging.","woman":"Lift weights! Won't get bulky. Benefits: strength, bones, metabolism!","form":"Form over weight ALWAYS! Bad form = injury. Start light, master movement.","nutrition":"70-80% of results! Can't out-train bad diet. Focus nutrient-dense foods.","hydration":"Improves performance, aids recovery, regulates temperature. Sip throughout day.","flexibility":"Enhances performance, reduces injury. Add yoga/mobility 2-3x/week.","core":"Improves posture, balance, strength! Planks, dead bugs, bird dogs, pallof presses.","hiit":"20-30sec max, 60-90sec rest. Repeat 8-10x. Fat loss. 2-3x/week max!","morning":"Great! Fasted or light snack. Benefits: consistency, energy. Eat protein after.","evening":"Works too! May be stronger. Eat 1-2hrs before. May affect sleep - test it.","food":"Nourish body, align goals. Prioritize proteins, complex carbs, healthy fats, veggies.","weight loss":"Consistency over perfection! Balanced nutrition + exercise + sleep + hydration.","muscle":"Grow during rest! Eat protein, lift consistently, adequate recovery.","exercise":"Consistency trumps intensity! Better moderate regularly than intense sporadically.","how":"Start today! Set one goal, schedule workout, clean foods, take photos.","when":"Best time is when you'll actually do it! Some prefer mornings, others evenings.","start":"Hardest part is starting! Begin where you are, use what you have."};
+const FALLBACKS=["That's interesting! I specialize in fitness, nutrition, weight loss, muscle building, workouts, recovery, motivation. Could you rephrase?","Great question! While I'm focused on fitness, I'd love to help! Ask about workouts, nutrition, supplements, recovery, motivation.","I'm here for your fitness journey! Try 'how to lose weight', 'build muscle', 'meal prep', 'workout routines', 'staying motivated'.","Interesting! What about: weight loss, muscle building, nutrition, workout programming, recovery?","I'm your AI fitness coach! I help with exercise, nutrition, supplements, injury prevention, motivation. What interests you?"];
 
 async function getAIReply(msg){
     let reply='';
-    
-    // Try Chrome AI
     if('ai' in self && 'languageModel' in self.ai){
         try{
             const capabilities=await self.ai.languageModel.capabilities();
             if(capabilities && capabilities.available==='readily'){
-                const session=await self.ai.languageModel.create({
-                    systemPrompt:"You are an enthusiastic fitness coach. Give practical advice in 2-3 sentences. Be encouraging!"
-                });
+                const session=await self.ai.languageModel.create({systemPrompt:"You are an enthusiastic fitness coach. Give practical advice in 2-3 sentences. Be encouraging!"});
                 reply=await session.prompt(msg);
                 session.destroy();
             }
         }catch(e){}
     }
-    
-    // Fallback to keywords
     if(!reply){
         const m=msg.toLowerCase();
         for(let key in AI){if(m.includes(key)){reply=AI[key];break;}}
         if(!reply)reply=FALLBACKS[Math.floor(Math.random()*FALLBACKS.length)];
     }
-    
     return reply;
 }
 
@@ -1139,7 +1002,6 @@ async function sendMsg(){
     addBotMessage(reply);
 }
 
-// Init
 document.addEventListener('DOMContentLoaded',()=>{
     load();
     setTimeout(()=>{goTo(STATE.user?'dashboard':'login');},2000);
