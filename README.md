@@ -2,7 +2,7 @@
 
 A professional PWA fitness tracking app with AI coaching, GPS workout tracking, nutrition logging, and goal management.
 
-## Features
+## Features 
 
 ✅ **User Authentication** - Secure signup/login with localStorage  
 ✅ **GPS Workout Tracking** - Real-time tracking for Walking, Running, Cycling, Hiking  
